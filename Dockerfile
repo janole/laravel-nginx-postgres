@@ -2,6 +2,8 @@ FROM php:7.2-fpm
 
 ENV DEBIAN_FRONTEND noninteractive
 
+WORKDIR /app
+
 RUN	true \
 #
 # Install all necessary PHP mods
@@ -39,6 +41,11 @@ RUN	true \
 # Install some imaging tools
 #
 	&& apt-get install -y imagemagick poppler-utils \
+#
+# Prepare folder structure ...
+#
+   	&& mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views \
+    && chown -R www-data:www-data /app \
 #
 # Clean-up
 #
