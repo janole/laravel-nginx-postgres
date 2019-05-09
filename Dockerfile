@@ -9,8 +9,10 @@ RUN	true \
 # Install all necessary PHP mods
 #
 	&& apt-get update \
-	&& apt-get install -y libxml2-dev zlib1g-dev libpq-dev libpng-dev libsodium-dev libgmp-dev \
-	&& docker-php-ext-install xml pgsql pdo_pgsql zip gd gmp intl \
+	&& apt-get install -y libxml2-dev zlib1g-dev libpq-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libsodium-dev libgmp-dev \
+	&& docker-php-ext-install xml pgsql pdo_pgsql zip gmp intl \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd \
 #
 # Use the default PHP production configuration
 #
