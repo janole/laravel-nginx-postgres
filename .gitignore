@@ -1,0 +1,5 @@
+# Exclude Visual Studio Code history
+.history
+
+# Exclude vi tmp files
+**/.*.swp
