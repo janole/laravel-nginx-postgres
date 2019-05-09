@@ -3,9 +3,11 @@ set -e
 
 IMAGE=janole/laravel-nginx-postgres
 
-if [ -z "$(git status --porcelain)" ]; then
+if [ "$(git fetch && test `git rev-parse --abbrev-ref HEAD` == 'dev' && git diff-index --quiet HEAD)" ]; then
 
     echo "*** Build LATEST based on master ..."
+
+exit
 
     git checkout master && docker build -t "${IMAGE}:latest" . && docker push "${IMAGE}:latest"
 
@@ -17,6 +19,8 @@ if [ -z "$(git status --porcelain)" ]; then
 else
 
     echo "*** Build DEV images based on current dirty working directory ..."
+
+exit
 
     docker build -t "${IMAGE}:dev" . && docker push "${IMAGE}:dev"
 
