@@ -3,7 +3,7 @@ set -e
 
 IMAGE=janole/laravel-nginx-postgres
 
-if [ "$(git fetch && test `git rev-parse --abbrev-ref HEAD` == 'dev' && git diff-index --quiet HEAD)" ]; then
+if git fetch && test "`git rev-parse --abbrev-ref HEAD`" = "master" && git diff-index --quiet HEAD; then
 
     echo "*** Build LATEST based on master ..."
 
