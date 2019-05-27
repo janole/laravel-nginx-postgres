@@ -31,7 +31,7 @@ RUN	true \
 #
 	&& rm -rf /etc/nginx/sites-available/* && chown -Rc www-data:www-data /var/www \
 #
-# Prepate supervisord
+# Prepare supervisord
 #
 	&& mkdir -p /var/log/supervisor && rm -f /etc/supervisor/conf.d/* \
 #
