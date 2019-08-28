@@ -2,27 +2,26 @@
 set -e
 
 IMAGE=janole/laravel-nginx-postgres
+VERSION=1.0.7
 
 if git fetch && test "`git rev-parse --abbrev-ref HEAD`" = "master" && git diff-index --quiet HEAD; then
 
-    echo "*** Build LATEST based on master ..."
-
-    docker build --squash -t "${IMAGE}:latest" . && docker push "${IMAGE}:latest"
-
-    echo "*** Build images dependent on LATEST ..."
-
-    sed "s#FROM janole.*#FROM ${IMAGE}:latest#" unoconv/Dockerfile | docker build -f - -t "${IMAGE}:unoconv" .
-    docker push "${IMAGE}:unoconv"
+    TARGET="${IMAGE}:${VERSION}"
 
 else
 
-    echo "*** Build DEV images based on current dirty working directory ..."
-
-    docker build --squash -t "${IMAGE}:dev" . && docker push "${IMAGE}:dev"
-
-    echo "*** Build images dependent on DEV ..."
-
-    sed "s#FROM janole.*#FROM ${IMAGE}:dev#" unoconv/Dockerfile | docker build -f - -t "${IMAGE}:dev-unoconv" .
-    docker push "${IMAGE}:dev-unoconv"
+    TARGET="${IMAGE}:${VERSION}-dev"
 
 fi
+
+echo "*** Build ${TARGET} based on master ..."
+
+docker build --pull -t "${TARGET}" .
+
+echo "*** Build images dependent on ${TARGET} ..."
+
+docker build -f unoconv/Dockerfile --build-arg "FROM=${TARGET}" -t "${TARGET}-unoconv" .
+
+echo "*** Push images ..."
+
+docker push "${TARGET}" && docker push "${TARGET}-unoconv"
