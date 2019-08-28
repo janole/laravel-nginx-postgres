@@ -15,6 +15,8 @@ jobs:
         user: ${{ secrets.DOCKER_USERNAME }}
         pass: ${{ secrets.DOCKER_PASSWORD }}
       run: |
-        echo ${USER}
+        env
         echo ${{ secrets.DOCKER_USERNAME }}
-        # docker login -u "${USER}" -p "${PASS}" && docker push janole/laravel-nginx-postgres:0-master && docker logout
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        # docker push janole/laravel-nginx-postgres:0-master
+        docker logout
