@@ -1,4 +1,6 @@
-FROM php:7.2-fpm
+FROM php:7.2-fpm-stretch
+
+LABEL maintainer="Jan Ole Suhr <ole@janole.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -10,9 +12,11 @@ RUN	true \
 #
 	&& apt-get update \
 	&& apt-get install -y libxml2-dev zlib1g-dev libpq-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libxpm-dev libwebp-dev libsodium-dev libgmp-dev \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-xpm-dir=/usr/incude/ --with-webp-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd \
+	&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-xpm-dir=/usr/incude/ --with-webp-dir=/usr/include/ \
+	&& docker-php-ext-install -j$(nproc) gd \
 	&& docker-php-ext-install xml pgsql pdo_pgsql zip gmp intl \
+	&& pecl install mailparse \
+	&& docker-php-ext-enable mailparse \
 #
 # Use the default PHP production configuration
 #
@@ -20,7 +24,7 @@ RUN	true \
 #
 # Install NGINX and all other tools
 #
-	&& apt-get install -y nginx supervisor socat cron unzip localehelper vim msmtp msmtp-mta \
+	&& apt-get install -y nginx supervisor socat unzip localehelper msmtp msmtp-mta procps vim \
 #
 # Link NGINX log to stdout
 #
@@ -42,12 +46,12 @@ RUN	true \
 #
 # Install some imaging tools
 #
-	&& apt-get install -y imagemagick poppler-utils \
+	&& apt-get install -y imagemagick poppler-utils exiftool \
 #
 # Prepare folder structure ...
 #
    	&& mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views \
-    && chown -R www-data:www-data /app \
+	&& chown -R www-data:www-data /app \
 #
 # Clean-up
 #
@@ -66,4 +70,3 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 #
 CMD ["/usr/bin/supervisord", "-c", "/supervisord.conf"]
-
