@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on: [push]
+
+jobs:
+
+  build:
+ 
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the base image
+      run: docker build . -t janole/laravel-nginx-postgres:0-master
+    - name: Push the base image
+      run: |
+        env
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker push janole/laravel-nginx-postgres:0-master
+        docker logout
+        rm ~/.docker/config.json
