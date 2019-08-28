@@ -1,3 +1,4 @@
-FROM janole/laravel-nginx-postgres
+ARG FROM
+FROM $FROM
 
-RUN apt-get update && apt-get install -y unoconv && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /usr/share/man/man1 && apt-get update && apt-get install -y unoconv && rm -rf /var/lib/apt/lists/*
