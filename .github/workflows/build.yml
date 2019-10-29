@@ -11,11 +11,14 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build the base image
-      run: docker build --pull -t janole/laravel-nginx-postgres:0-master .
-    - name: Push the base image
+      run: docker build --pull -t ${{ github.repository }}:`cat version` .
+    - name: Build the unoconv image
+      run: docker build --pull --build-arg FROM=${{ github.repository }}:`cat version` -t ${{ github.repository }}:`cat version`-unoconv .
+    - name: Push the images ...
       run: |
         env
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker push janole/laravel-nginx-postgres:0-master
+        docker push ${{ github.repository }}:`cat version`
+        docker push ${{ github.repository }}:`cat version`-unoconv
         docker logout
         rm ~/.docker/config.json
