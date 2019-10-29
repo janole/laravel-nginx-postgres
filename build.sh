@@ -39,6 +39,10 @@ docker build -f unoconv/Dockerfile --build-arg "FROM=${TARGET}" -t "${IMAGE}:${V
 
 echo "*** Push images ..."
 
-docker push "${TARGET}" 
+docker push "${IMAGE}:${VERSION}"
+docker push "${IMAGE}:${VERSION1}"
+docker push "${IMAGE}:${VERSION0}"
 
-docker push "${IMAGE}/unoconv:${VERSION}"
+docker push "${IMAGE}:${VERSION}-unoconv"
+docker push "${IMAGE}:${VERSION1}-unoconv"
+docker push "${IMAGE}:${VERSION0}-unoconv"
