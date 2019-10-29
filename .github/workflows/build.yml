@@ -13,7 +13,7 @@ jobs:
     - name: Build the base image
       run: docker build --pull -t ${{ github.repository }}:`cat version` .
     - name: Build the unoconv image
-      run: docker build --pull --build-arg FROM=${{ github.repository }}:`cat version` -t ${{ github.repository }}:`cat version`-unoconv .
+      run: docker build --pull --build-arg FROM=${{ github.repository }}:`cat version` -t ${{ github.repository }}:`cat version`-unoconv -f unoconv/Dockerfile .
     - name: Push the images ...
       run: |
         env
