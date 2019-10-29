@@ -6,20 +6,23 @@ IMAGE=janole/laravel-nginx-postgres
 VERSION=`cat version`
 
 # Branch or Tag ...
-if [ -n ${GITHUB_REF} ]; then
-    BRANCH=`echo ${GITHUB_REF} | sed 's=.*/=/='`;
+if [ -n "${GITHUB_REF}" ]; then
+    BRANCH=`echo ${GITHUB_REF} | sed 's=.*/==' | grep -v "^master$"`;
 else
-    BRANCH=`(git rev-parse --abbrev-ref HEAD 2>/dev/null) | grep -v "^master$" | sed 's=^=/='`;
+    BRANCH=`(git rev-parse --abbrev-ref HEAD 2>/dev/null) | grep -v "^master$"`;
 fi
 
-IMAGE=${IMAGE}${BRANCH}${COUNT}
+if [ -n "${BRANCH}" ]; then
+    BRANCH=-${BRANCH};
+fi
 
+#
 COUNT=`git rev-list HEAD --count 2>/dev/null`
-VERSION=${VERSION}.${COUNT}
+VERSION=${VERSION}.${COUNT}${BRANCH}
 
 # Create hierarchical versions (1.2.3 => "1.2" and "1")
-VERSION1=`sed "s/\(^[0-9]*\.[0-9]*\).*/\1/" version`
-VERSION0=`sed "s/\(^[0-9]*\).*/\1/" version`
+VERSION1=`sed "s/\(^[0-9]*\.[0-9]*\).*/\1/" version`${BRANCH}
+VERSION0=`sed "s/\(^[0-9]*\).*/\1/" version`${BRANCH}
 
 #
 TARGET=${IMAGE}:${VERSION}
@@ -32,7 +35,7 @@ docker build --pull -t "${TARGET}" -t "${IMAGE}:${VERSION1}" -t "${IMAGE}:${VERS
 #
 echo "*** Build images dependent on ${TARGET} ..."
 
-docker build -f unoconv/Dockerfile --build-arg "FROM=${TARGET}" -t "${IMAGE}/unoconv:${VERSION}" -t "${IMAGE}/unoconv:${VERSION1}" -t "${IMAGE}/unoconv:${VERSION0}" -t "${IMAGE}/unoconv:latest" .
+docker build -f unoconv/Dockerfile --build-arg "FROM=${TARGET}" -t "${IMAGE}:${VERSION}-unoconv" -t "${IMAGE}:${VERSION1}-unoconv" -t "${IMAGE}:${VERSION0}-unoconv" .
 
 echo "*** Push images ..."
 
