@@ -7,9 +7,9 @@ VERSION=`cat version`
 
 # Branch or Tag ...
 if [ -n "${GITHUB_REF}" ]; then
-    BRANCH=`echo ${GITHUB_REF} | sed 's=.*/==' | grep -v "^master$"`;
+    BRANCH=`echo ${GITHUB_REF} | sed 's=.*/==' | grep -v "^master$" || true`;
 else
-    BRANCH=`(git rev-parse --abbrev-ref HEAD 2>/dev/null) | grep -v "^master$"`;
+    BRANCH=`(git rev-parse --abbrev-ref HEAD 2>/dev/null) | grep -v "^master$" || true`;
 fi
 
 if [ -n "${BRANCH}" ]; then
