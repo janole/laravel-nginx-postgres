@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build the base image
-      run: docker build . -t janole/laravel-nginx-postgres:0-master
+      run: docker build --pull -t janole/laravel-nginx-postgres:0-master .
     - name: Push the base image
       run: |
         env
