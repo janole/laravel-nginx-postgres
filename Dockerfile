@@ -14,7 +14,7 @@ RUN	true \
 	&& apt-get install -y libxml2-dev zlib1g-dev libpq-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libxpm-dev libwebp-dev libsodium-dev libgmp-dev \
 	&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-xpm-dir=/usr/incude/ --with-webp-dir=/usr/include/ \
 	&& docker-php-ext-install -j$(nproc) gd \
-	&& docker-php-ext-install xml pgsql pdo_pgsql zip gmp intl \
+	&& docker-php-ext-install xml pgsql pdo_pgsql zip gmp intl opcache \
 #
 # Use the default PHP production configuration
 #
@@ -65,6 +65,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Disable warning for running composer as root
 ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Configure OPCACHE
+ENV OPCACHE_ENABLE=1
+ENV OPCACHE_VALIDATE_TIMESTAMPS=0
+ENV OPCACHE_REVALIDATE_FREQ=2
+ENV OPCACHE_FILE_CACHE=""
 
 #
 CMD ["/usr/bin/supervisord", "-c", "/supervisord.conf"]
