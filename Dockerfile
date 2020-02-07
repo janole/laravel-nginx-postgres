@@ -1,7 +1,5 @@
 FROM php:7.2-fpm-stretch
 
-LABEL maintainer="Jan Ole Suhr <ole@janole.com>"
-
 ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /app

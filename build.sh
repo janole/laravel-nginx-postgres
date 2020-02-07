@@ -2,8 +2,11 @@
 set -e
 
 #
-IMAGE=janole/laravel-nginx-postgres
+IMAGE=${DOCKER_ID:=janole}/laravel-nginx-postgres
 VERSION=`cat version`
+
+#
+MAINTAINER=${DOCKER_MAINTAINER:=Jan Ole Suhr <ole@janole.com>}
 
 # Branch or Tag ...
 if [ -n "${GITHUB_REF}" ]; then
@@ -30,12 +33,12 @@ TARGET=${IMAGE}:${VERSION}
 #
 echo "*** Build ${TARGET} based on master ..."
 
-docker build --pull -t "${TARGET}" -t "${IMAGE}:${VERSION1}" -t "${IMAGE}:${VERSION0}" -t "${IMAGE}:latest" .
+docker build --pull --label "maintainer=${MAINTAINER}" -t "${TARGET}" -t "${IMAGE}:${VERSION1}" -t "${IMAGE}:${VERSION0}" -t "${IMAGE}:latest" .
 
 #
 echo "*** Build images dependent on ${TARGET} ..."
 
-docker build -f unoconv/Dockerfile --build-arg "FROM=${TARGET}" -t "${IMAGE}:${VERSION}-unoconv" -t "${IMAGE}:${VERSION1}-unoconv" -t "${IMAGE}:${VERSION0}-unoconv" .
+docker build -f unoconv/Dockerfile --label "maintainer=${MAINTAINER}" --build-arg "FROM=${TARGET}" -t "${IMAGE}:${VERSION}-unoconv" -t "${IMAGE}:${VERSION1}-unoconv" -t "${IMAGE}:${VERSION0}-unoconv" .
 
 echo "*** Push images ..."
 
