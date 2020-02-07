@@ -20,7 +20,7 @@ RUN	true \
 #
 # Install NGINX and all other tools
 #
-	&& apt-get install -y nginx supervisor socat unzip localehelper msmtp msmtp-mta procps vim \
+	&& apt-get install -y nginx supervisor socat localehelper msmtp msmtp-mta procps vim \
 #
 # Link NGINX log to stdout
 #
