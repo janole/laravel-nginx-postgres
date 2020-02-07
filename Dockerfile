@@ -42,10 +42,6 @@ RUN	true \
 	&& curl -sL https://deb.nodesource.com/setup_11.x | bash - \
 	&& apt-get install -y nodejs \
 #
-# Install some imaging tools
-#
-	&& apt-get install -y imagemagick poppler-utils exiftool \
-#
 # Prepare folder structure ...
 #
    	&& mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views \
