@@ -8,46 +8,46 @@ RUN	true \
 #
 # Install all necessary PHP mods
 #
-	&& apt-get update \
-	&& apt-get install -y libxml2-dev zlib1g-dev libpq-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libxpm-dev libwebp-dev libsodium-dev libgmp-dev \
-	&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-xpm-dir=/usr/incude/ --with-webp-dir=/usr/include/ \
-	&& docker-php-ext-install -j$(nproc) gd \
-	&& docker-php-ext-install xml pgsql pdo_pgsql zip gmp intl opcache \
+    && apt-get update \
+    && apt-get install -y libxml2-dev zlib1g-dev libpq-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libxpm-dev libwebp-dev libsodium-dev libgmp-dev \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-xpm-dir=/usr/incude/ --with-webp-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install xml pgsql pdo_pgsql zip gmp intl opcache \
 #
 # Use the default PHP production configuration
 #
-	&& mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini \
+    && mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini \
 #
 # Install NGINX and all other tools
 #
-	&& apt-get install -y nginx supervisor socat localehelper msmtp msmtp-mta procps vim \
+    && apt-get install -y nginx supervisor socat localehelper msmtp msmtp-mta procps vim \
 #
 # Link NGINX log to stdout
 #
-	&& ln -sf /dev/stdout /var/log/nginx/access.log \
-	&& ln -sf /dev/stdout /var/log/nginx/error.log \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stdout /var/log/nginx/error.log \
 #
 # Remove unnecessary NGINX files, change access rights (just to be on the safe side ...)
 #
-	&& rm -rf /etc/nginx/sites-available/* && chown -Rc www-data:www-data /var/www \
+    && rm -rf /etc/nginx/sites-available/* && chown -Rc www-data:www-data /var/www \
 #
 # Prepare supervisord
 #
-	&& mkdir -p /var/log/supervisor && rm -f /etc/supervisor/conf.d/* \
+    && mkdir -p /var/log/supervisor && rm -f /etc/supervisor/conf.d/* \
 #
 # Install Node.js
 #
-	&& curl -sL https://deb.nodesource.com/setup_11.x | bash - \
-	&& apt-get install -y nodejs \
+    && curl -sL https://deb.nodesource.com/setup_11.x | bash - \
+    && apt-get install -y nodejs \
 #
 # Prepare folder structure ...
 #
-   	&& mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views \
-	&& chown -R www-data:www-data /app \
+    && mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views \
+    && chown -R www-data:www-data /app \
 #
 # Clean-up
 #
-	&& rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 #
 # Copy our custom configs
