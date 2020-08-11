@@ -66,8 +66,5 @@ ENV OPCACHE_VALIDATE_TIMESTAMPS=1
 ENV OPCACHE_REVALIDATE_FREQ=2
 ENV OPCACHE_FILE_CACHE=""
 
-# Configure Laravel
-ENV LARAVEL_QUEUE="default"
-
 #
 CMD ["/usr/bin/supervisord", "-c", "/supervisord.conf"]
