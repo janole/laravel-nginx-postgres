@@ -1,12 +1,9 @@
 name: Scan Image
 
 on:
-  push:
-    branches:
-      - trivy
-
-  #schedule:
-  #  - cron: '15 23 * * *'
+  workflow_dispatch:
+  schedule:
+    - cron: '15 23 * * *'
 
 jobs:
   check:
@@ -17,10 +14,8 @@ jobs:
           fetch-depth: 0
       - name: Get Image Name
         run: |
-          ./build.sh -p
           export IMAGE=$(./build.sh -p | sed "s/\.[0-9a-z-]*$//")
           echo "::set-env name=IMAGE::${IMAGE}"
-          echo "Image ${{ env.IMAGE }}"
       - name: Run trivy
         uses: aquasecurity/trivy-action@0.0.8
         with:
