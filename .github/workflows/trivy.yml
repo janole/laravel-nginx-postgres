@@ -1,0 +1,28 @@
+name: Scan Image
+
+on:
+  push:
+    branches:
+      - trivy
+
+  #schedule:
+  #  - cron: '15 23 * * *'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get Image Name
+        run: |
+          export IMAGE=$(./build.sh -p | sed "s/\.[0-9]*$//")
+          echo "::set-env name=IMAGE::${IMAGE}"
+          echo "Image ${IMAGE} ${{ env.IMAGE }}"
+      - name: Run trivy
+        uses: aquasecurity/trivy-action@0.0.8
+        with:
+          image-ref: "${{ env.IMAGE }}"
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          severity: "HIGH,CRITICAL"
