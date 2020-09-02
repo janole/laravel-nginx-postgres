@@ -31,7 +31,7 @@ VERSION0=`sed "s/\(^[0-9]*\).*/\1/" version`${BRANCH}
 TARGET=${IMAGE}:${VERSION}
 
 #
-if [ "$1" == "-p" ]; then echo $TARGET; exit; fi
+if [ "$1" = "-p" ]; then echo $TARGET; exit; fi
 
 #
 echo "*** Build ${TARGET} based on master ..."
