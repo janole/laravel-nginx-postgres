@@ -35,11 +35,6 @@ RUN	true \
 #
     && mkdir -p /var/log/supervisor && rm -f /etc/supervisor/conf.d/* \
 #
-# Install Node.js
-#
-    && curl -sL https://deb.nodesource.com/setup_11.x | bash - \
-    && apt-get install -y nodejs \
-#
 # Prepare folder structure ...
 #
     && mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views \
