@@ -15,7 +15,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Get Image Name
         run: |
-          export IMAGE=$(./build.sh -p | sed "s/\.[0-9]*$//")
+          ./build.sh -p | sed "s/\.[0-9a-z-]*$//"
+          export IMAGE=$(./build.sh -p | sed "s/\.[0-9a-z-]*$//")
           echo "::set-env name=IMAGE::${IMAGE}"
           echo "Image ${IMAGE} ${{ env.IMAGE }}"
       - name: Run trivy
