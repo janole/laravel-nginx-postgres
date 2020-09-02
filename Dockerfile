@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-stretch
+FROM php:7.3-fpm-stretch
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -9,10 +9,9 @@ RUN	true \
 # Install all necessary PHP mods
 #
     && apt-get update \
-    && apt-get install -y libxml2-dev zlib1g-dev libpq-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libxpm-dev libwebp-dev libsodium-dev libgmp-dev \
+    && apt-get install -y libxml2-dev libzip-dev libpq-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libxpm-dev libwebp-dev libsodium-dev libgmp-dev \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-xpm-dir=/usr/incude/ --with-webp-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install xml pgsql pdo_pgsql zip gmp intl opcache \
+    && docker-php-ext-install -j$(nproc) gd xml pgsql pdo_pgsql zip gmp intl opcache \
 #
 # Use the default PHP production configuration
 #
