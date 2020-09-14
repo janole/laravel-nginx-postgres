@@ -27,6 +27,4 @@ jobs:
       - name: Try to start build workflow if trivy failed
         if: ${{ failure() }}
         run: |
-          echo ${GITHUB_REPOSITORY}
           curl -X POST -u ${{ secrets.PAT }} -H "Accept: application/vnd.github.v3+json" -d '{"ref":"refs/heads/master"}' https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/build.yml/dispatches
-
