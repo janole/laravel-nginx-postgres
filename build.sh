@@ -2,6 +2,9 @@
 set -e
 
 #
+env && exit
+
+#
 IMAGE=${DOCKER_ID:=janole}/laravel-nginx-postgres
 VERSION=`cat version`
 
