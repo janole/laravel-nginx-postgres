@@ -2,9 +2,6 @@
 set -e
 
 #
-env && exit
-
-#
 IMAGE=${DOCKER_ID:=janole}/laravel-nginx-postgres
 VERSION=`cat version`
 
@@ -24,6 +21,12 @@ fi
 
 #
 COUNT=`git rev-list HEAD --count 2>/dev/null`
+
+if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+    COUNT="${COUNT}-manual"
+fi
+
+#
 VERSION=${VERSION}.${COUNT}${BRANCH}
 
 # Create hierarchical versions (1.2.3 => "1.2" and "1")
