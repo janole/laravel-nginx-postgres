@@ -4,11 +4,18 @@ ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /app
 
+#
+# Install all necessary libs and PHP modules
+#
 RUN	true \
+#
+# Update package list and update packages
+#
+    && apt-get update \
+    && apt-get dist-upgrade -y \
 #
 # Install all necessary PHP mods
 #
-    && apt-get update \
     && apt-get install -y libxml2-dev libzip-dev libpq-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libxpm-dev libwebp-dev libsodium-dev libgmp-dev \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-xpm-dir=/usr/incude/ --with-webp-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd xml pgsql pdo_pgsql zip gmp intl opcache \
