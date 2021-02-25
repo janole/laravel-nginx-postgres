@@ -21,7 +21,11 @@ RUN true \
 # The xdebug.ini contains mostly ENV vars for easy overriding
 COPY ./xdebug.ini $PHP_INI_DIR/conf.d/zzzz-xdebug.ini
 
-# Default settings for xdebug
+# Xdebug v2
+ENV XDEBUG_REMOTE_ENABLE=1
+ENV XDEBUG_REMOTE_HOST="host.docker.internal"
+ENV XDEBUG_REMOTE_PORT=9000
+# Xdebug v3
 ENV XDEBUG_MODE="debug"
 # Try to connect to host (this will work with Docker for Mac/Windows only.)
 # See https://docs.docker.com/docker-for-mac/networking/#use-cases-and-workarounds
