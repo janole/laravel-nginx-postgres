@@ -15,6 +15,11 @@ else
     BRANCH=`(git rev-parse --abbrev-ref HEAD 2>/dev/null) | grep -v "^master$" || true`;
 fi
 
+# If branch equals version, do not duplicate!
+if [ "${BRANCH}" = "${VERSION}" ]; then
+    unset BRANCH
+fi
+
 if [ -n "${BRANCH}" ]; then
     BRANCH=-${BRANCH};
 fi
@@ -78,18 +83,24 @@ build()
         for option in options/*/Dockerfile ; do
 
             OPTION=`dirname $option | sed "s/[^/]*\///"`
-            build $option $SUFFIX-$OPTION $_TARGET stop
+            build $option $_SUFFIX-$OPTION $_TARGET stop
 
         done
 
     fi
 }
 
-# build the base-image
-build Dockerfile
+for base in Dockerfile* ; do
 
-# build all variants
-for variant in */Dockerfile ; do
-    SUFFIX=-`dirname $variant`
-    build $variant $SUFFIX $TARGET
+    ALT=`echo $base | sed "s/Dockerfile//;s/^\./-/;"`
+
+    # build the base-image
+    build $base $ALT
+
+    # build all variants
+    for variant in */Dockerfile ; do
+        SUFFIX=$ALT-`dirname $variant`
+        build $variant $SUFFIX $TARGET$ALT
+    done
+
 done
