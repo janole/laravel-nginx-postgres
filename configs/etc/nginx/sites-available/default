@@ -86,4 +86,7 @@ server
         # Don't reveal out version number
         fastcgi_hide_header X-Powered-By;
     }
+
+    location ~ /\.ht { deny all; }
+    location ~ /\.git { deny all; }
 }
