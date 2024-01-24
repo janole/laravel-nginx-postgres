@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+shopt -s nullglob
+
 #
 IMAGE=${DOCKER_ID:=janole}/laravel-nginx-postgres
 VERSION=`cat version`
